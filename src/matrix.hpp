@@ -4,9 +4,9 @@
 #include <array>
 #include <algorithm> // std::transform
 #include <execution> // std::excecution::unseq
-#include <functional> // std::plus, std::minus
+#include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greate, std::greater_equal, std::equal_to, std::not_equal_to
 
-#include "number.hpp"
+#include "linalg.hpp"
 
 namespace linalg {
 using size_type = std::size_t;
