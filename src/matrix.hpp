@@ -4,7 +4,7 @@
 #include <array>
 #include <algorithm> // std::transform
 #include <execution> // std::excecution::unseq
-#include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greate, std::greater_equal, std::equal_to, std::not_equal_to
+#include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greater, std::greater_equal, std::equal_to, std::not_equal_to
 #include <iterator>
 
 #include "linalg.hpp"
@@ -27,7 +27,8 @@ public:
     [[nodiscard]] static constexpr size_type cols() noexcept { return _cols; }
     [[nodiscard]] static constexpr size_type size() noexcept { return size_; }
 
-    /// arithmetic operators
+    /// @section arithmetic_operators
+
     [[nodiscard]] Matrix add (const NumberLike scalar)       const noexcept;
     [[nodiscard]] Matrix add (const Matrix& other)           const noexcept;
     [[nodiscard]] Matrix operator+ (const NumberLike scalar) const noexcept;
@@ -64,8 +65,12 @@ public:
     [[nodiscard]] Matrix  operator/ (const NumberLike scalar)     const noexcept;
     Matrix& operator/=(const NumberLike scalar)     noexcept;
 
+    /// @section logical_operators
+
     [[nodiscard]] Matrix<_rows, _cols, bool> negate() const noexcept;
     [[nodiscard]] Matrix<_rows, _cols, bool> operator!() const noexcept;
+
+    /// @section comparison_operators
 
     [[nodiscard]] Matrix<_rows, _cols, bool> equal(const Matrix& other) const noexcept;
     [[nodiscard]] Matrix<_rows, _cols, bool> equal(const NumberLike scalar) const noexcept;
@@ -103,6 +108,8 @@ public:
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const Matrix& other) const noexcept;
     [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const NumberLike scalar) const noexcept;
+
+    /// @section indexing_operators
 
     [[nodiscard]] NumberLike& operator[](size_type row, size_type col) noexcept;
     [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
