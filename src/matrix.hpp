@@ -26,20 +26,20 @@ public:
     [[nodiscard]] static constexpr size_type size() noexcept { return size_; }
 
     /// arithmetic operators
-    [[nodiscard]] Matrix  add (const NumberLike scalar)       const noexcept;
-    [[nodiscard]] Matrix  add (const Matrix& other)           const noexcept;
-    [[nodiscard]] Matrix  operator+ (const NumberLike scalar) const noexcept;
-    [[nodiscard]] Matrix  operator+ (const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix add (const NumberLike scalar)       const noexcept;
+    [[nodiscard]] Matrix add (const Matrix& other)           const noexcept;
+    [[nodiscard]] Matrix operator+ (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix operator+ (const Matrix& other)     const noexcept;
     
     Matrix& add_inplace(const NumberLike scalar) noexcept;
     Matrix& add_inplace(const Matrix& other)     noexcept;
     Matrix& operator+= (const NumberLike scalar) noexcept;
     Matrix& operator+= (const Matrix& other)     noexcept;
 
-    [[nodiscard]] Matrix  subtract (const NumberLike scalar) const noexcept;
-    [[nodiscard]] Matrix  subtract (const Matrix& other)     const noexcept;
-    [[nodiscard]] Matrix  operator-(const NumberLike scalar) const noexcept;
-    [[nodiscard]] Matrix  operator-(const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix subtract (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix subtract (const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix operator-(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix operator-(const Matrix& other)     const noexcept;
     
     Matrix& subtract_inplace(const NumberLike scalar) noexcept;
     Matrix& subtract_inplace(const Matrix& other)     noexcept;
