@@ -221,8 +221,10 @@ public:
         using pointer           = NumberLike*;
         using reference         = NumberLike&;
 
-        strided_iterator(NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) 
-        {}
+        strided_iterator(NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) {
+            if(stride_ == 0)
+                stride_ = 1;
+        }
 
         inline reference operator*() const noexcept { return *ptr_; }
         inline pointer operator->() const noexcept { return ptr_; }
@@ -268,8 +270,10 @@ public:
         using pointer           = const NumberLike*;
         using reference         = const NumberLike&;
 
-        const_strided_iterator(const NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) 
-        {}
+        const_strided_iterator(const NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) {
+            if(stride_ == 0)
+                stride_ = 1;
+        }
 
         inline reference operator*() const noexcept { return *ptr_; }
         inline pointer operator->() const noexcept { return ptr_; }
@@ -285,7 +289,7 @@ public:
             return result; 
         }
 
-        inline difference_type distance(const const_strided_iterator& other) const noexcept { return ptr_ - other.ptr_; }
+        inline difference_type distance(const const_strided_iterator& other) const noexcept { return (ptr_ - other.ptr_) / static_cast; }
 
         inline friend bool operator==(const const_strided_iterator a, const const_strided_iterator b) noexcept { return a.ptr_ == b.ptr_; }
         inline friend bool operator!=(const const_strided_iterator a, const const_strided_iterator b) noexcept { return a.ptr_ != b.ptr_; }
