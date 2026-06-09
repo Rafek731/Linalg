@@ -240,7 +240,7 @@ public:
             return result; 
         }
 
-        inline difference_type distance(const strided_iterator& other) const noexcept { return ptr_ - other.ptr_; }
+        inline difference_type distance(const strided_iterator& other) const noexcept { return (ptr_ - other.ptr_) / static_cast<difference_type>(stride_); }
 
         inline friend bool operator==(const strided_iterator a, const strided_iterator b) noexcept { return a.ptr_ == b.ptr_; }
         inline friend bool operator!=(const strided_iterator a, const strided_iterator b) noexcept { return a.ptr_ != b.ptr_; }
@@ -250,8 +250,8 @@ public:
         inline difference_type operator-(const strided_iterator& other) const noexcept { return distance(other); }
 
         
-        strided_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
-        strided_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        strided_iterator& operator+=(size_type jump) noexcept { ptr_ += jump * stride_; return *this; }
+        strided_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump * stride_; return *this; }
         
         inline friend bool operator< (const strided_iterator& a, const strided_iterator& b) noexcept { return a.ptr_ <  b.ptr_; }
         inline friend bool operator<=(const strided_iterator& a, const strided_iterator& b) noexcept { return a.ptr_ <= b.ptr_; }
@@ -289,7 +289,7 @@ public:
             return result; 
         }
 
-        inline difference_type distance(const const_strided_iterator& other) const noexcept { return (ptr_ - other.ptr_) / static_cast; }
+        inline difference_type distance(const const_strided_iterator& other) const noexcept { return (ptr_ - other.ptr_) / static_cast<difference_type>(stride_); }
 
         inline friend bool operator==(const const_strided_iterator a, const const_strided_iterator b) noexcept { return a.ptr_ == b.ptr_; }
         inline friend bool operator!=(const const_strided_iterator a, const const_strided_iterator b) noexcept { return a.ptr_ != b.ptr_; }
@@ -299,8 +299,8 @@ public:
         inline difference_type operator-(const const_strided_iterator& other) const noexcept { return distance(other); }
 
         
-        const_strided_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
-        strided_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        const_strided_iterator& operator+=(size_type jump) noexcept { ptr_ += jump * stride_; return *this; }
+        const_strided_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump * stride_; return *this; }
         
         inline friend bool operator< (const const_strided_iterator& a, const const_strided_iterator& b) noexcept { return a.ptr_ <  b.ptr_; }
         inline friend bool operator<=(const const_strided_iterator& a, const const_strided_iterator& b) noexcept { return a.ptr_ <= b.ptr_; }
