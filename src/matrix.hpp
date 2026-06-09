@@ -10,7 +10,7 @@
 #include "linalg.hpp"
 
 namespace linalg {
-    
+
 using size_type = std::size_t;
 
 static constexpr size_type dynamic = static_cast<size_type>(-1); 
@@ -202,11 +202,8 @@ public:
         pointer ptr_;
     };
     
-    struct stride_row_iterator {
-        
-    };
+    struct strided_iterator {
 
-    struct const_stride_row_iterator {
 
     };
 
@@ -222,7 +219,7 @@ public:
         
     };
 
-    struct const_stride_column_iterator {
+    struct const_strided_iterator {
 
     };
 
@@ -233,15 +230,14 @@ public:
     struct const_diagonal_iterator {
 
     };
-    
-    struct stride_diagonal_iterator {
 
+    struct column_iterator {
+        
     };
 
-    struct const_stride_diagonal_iterator {
+    struct const_column_iterator {
 
     };
-
 
 private:
     static constexpr size_type size_ = _rows * _cols;
