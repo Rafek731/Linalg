@@ -5,6 +5,7 @@
 #include <algorithm> // std::transform
 #include <execution> // std::excecution::unseq
 #include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greate, std::greater_equal, std::equal_to, std::not_equal_to
+#include <iterator>
 
 #include "linalg.hpp"
 
@@ -104,6 +105,38 @@ public:
 
     [[nodiscard]] NumberLike& operator[](size_type row, size_type col) noexcept;
     [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
+    
+    struct iterator {
+        
+    };
+    
+    struct const_iterator {
+
+    };
+    
+    struct col_iterator {
+
+    };
+
+    struct const_cols_iterator {
+
+    };
+
+    struct diag_iterator {
+
+    };
+
+    struct const_diag_iterator {
+
+    };
+
+    struct jump_iterator {
+
+    };
+
+    struct const_jump_iterator {
+
+    };
 
 private:
     static constexpr size_type size_ = _rows * _cols;
