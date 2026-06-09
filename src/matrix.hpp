@@ -255,6 +255,22 @@ Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::mul_inplace(
 template<size_type _rows, size_type _cols, Number NumberLike>
 template<size_type _other_cols>
 Matrix<_rows, _other_cols, NumberLike> Matrix<_rows, _cols, NumberLike>::mul(const Matrix<_cols, _other_cols, NumberLike>& other) const noexcept {
+    Matrix<_rows, _other_cols, NumberLike> tmp(0);
+    // worth noticing that when compiling with -O2 or -O3 flags modern compilers will cache loop invariant results automatically
+    for (size_type i = 0; i < _rows; ++i) {
+        size_type i_mul_other_cols = i * _other_cols; // cache loop invariant result
+
+        for (size_type k = 0; k < _cols; ++k) {
+            NumberLike a_ik = data_[i * _cols + k]; // cache the current result
+            size_type k_mul_other_cols = k * _other_cols; // cache loop invariant result
+
+            for (size_type j = 0; j < _other_cols; ++j) {
+                tmp.data_[i_mul_other_cols + j] += a_ik * other.data_[k_mul_other_cols + j];
+            }
+        }
+    }
+
+    return tmp;
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
