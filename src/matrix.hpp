@@ -202,19 +202,19 @@ public:
         pointer ptr_;
     };
     
-    struct flat_stride_iterator {
+    struct stride_row_iterator {
         
     };
 
-    struct const_flat_stride_iterator {
+    struct const_stride_row_iterator {
 
     };
 
-    struct flat_column_iterator {
+    struct column_iterator {
         
     };
 
-    struct flat_const_column_iterator {
+    struct const_column_iterator {
 
     };
     
@@ -222,7 +222,7 @@ public:
         
     };
 
-    struct stride_const_column_iterator {
+    struct const_stride_column_iterator {
 
     };
 
@@ -231,6 +231,14 @@ public:
     };
 
     struct const_diagonal_iterator {
+
+    };
+    
+    struct stride_diagonal_iterator {
+
+    };
+
+    struct const_stride_diagonal_iterator {
 
     };
 
