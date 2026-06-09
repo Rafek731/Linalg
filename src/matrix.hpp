@@ -6,6 +6,8 @@
 #include <execution> // std::excecution::unseq
 #include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greater, std::greater_equal, std::equal_to, std::not_equal_to
 #include <iterator>
+#include <limits>  // std::numeric_limits
+#include <cassert> // assert()
 
 #include "linalg.hpp"
 
@@ -165,10 +167,12 @@ public:
         row_iterator& operator+=(difference_type jump) noexcept { ptr_ += jump; return *this; }
         row_iterator& operator-=(difference_type jump) noexcept { ptr_ -= jump; return *this; }
         
-        [[nodiscard]] inline friend bool operator< (const row_iterator& a, const row_iterator& b) { return a.ptr_ < b.ptr; }
-        [[nodiscard]] inline friend bool operator<=(const row_iterator& a, const row_iterator& b) { return a.ptr_ <= b.ptr; }
-        [[nodiscard]] inline friend bool operator> (const row_iterator& a, const row_iterator& b) { return a.ptr_ > b.ptr; }
-        [[nodiscard]] inline friend bool operator>=(const row_iterator& a, const row_iterator& b) { return a.ptr_ >= b.ptr; }
+        [[nodiscard]] inline friend bool operator< (const row_iterator& a, const row_iterator& b) { return a.ptr_ <  b.ptr_; }
+        [[nodiscard]] inline friend bool operator<=(const row_iterator& a, const row_iterator& b) { return a.ptr_ <= b.ptr_; }
+        [[nodiscard]] inline friend bool operator> (const row_iterator& a, const row_iterator& b) { return a.ptr_ >  b.ptr_; }
+        [[nodiscard]] inline friend bool operator>=(const row_iterator& a, const row_iterator& b) { return a.ptr_ >= b.ptr_; }
+
+        [[nodiscard]] inline reference operator[](difference_type n) const noexcept { return *(ptr_ + n); }
 
     private:
         pointer ptr_;
@@ -222,11 +226,12 @@ public:
         const_row_iterator& operator+=(difference_type jump) noexcept { ptr_ += jump; return *this; }
         const_row_iterator& operator-=(difference_type jump) noexcept { ptr_ -= jump; return *this; }
         
-        [[nodiscard]] inline friend bool operator< (const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ < b.ptr; }
-        [[nodiscard]] inline friend bool operator<=(const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ <= b.ptr; }
-        [[nodiscard]] inline friend bool operator> (const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ > b.ptr; }
-        [[nodiscard]] inline friend bool operator>=(const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ >= b.ptr; }
+        [[nodiscard]] inline friend bool operator< (const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ <  b.ptr_; }
+        [[nodiscard]] inline friend bool operator<=(const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ <= b.ptr_; }
+        [[nodiscard]] inline friend bool operator> (const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ >  b.ptr_; }
+        [[nodiscard]] inline friend bool operator>=(const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ >= b.ptr_; }
 
+        [[nodiscard]] inline reference operator[](difference_type n) const noexcept { return *(ptr_ + n); }
     private:
         pointer ptr_;
     };
@@ -779,7 +784,7 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const Ma
 
 template<size_type _rows, size_type _cols, Number NumberLike>
 Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const NumberLike scalar) const noexcept {
-    return equal(other);
+    return equal(scalar);
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
