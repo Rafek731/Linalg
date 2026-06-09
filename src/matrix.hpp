@@ -106,37 +106,130 @@ public:
     [[nodiscard]] NumberLike& operator[](size_type row, size_type col) noexcept;
     [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
     
-    struct iterator {
+    struct flat_iterator {
+        using iterator_category = std::contiguous_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = NumberLike*;
+        using reference         = NumberLike&;
+
+        flat_iterator(NumberLike* const pointer) : ptr_(pointer) 
+        {}
+
+        inline reference operator*() const noexcept { return *ptr_; }
+        inline pointer operator->() const noexcept { return ptr_; }
+
+        flat_iterator& operator++() noexcept {
+            ++ptr_;
+            return *this; 
+        }  
+
+        flat_iterator operator++(int) noexcept {
+            flat_iterator result = *this; 
+            ++(*this); 
+            return result; 
+        }
+
+        inline difference_type distance(const flat_iterator& other) const noexcept { return ptr_ - other.ptr_; }
+
+        inline friend bool operator==(const flat_iterator a, const flat_iterator b) noexcept { return a.ptr_ == b.ptr_; }
+        inline friend bool operator!=(const flat_iterator a, const flat_iterator b) noexcept { return a.ptr_ != b.ptr_; }
+        inline friend flat_iterator operator+(const flat_iterator& a, size_type jump) noexcept { return flat_iterator(a.ptr_ + jump, a.stride_); }
+        inline friend flat_iterator operator+(size_type jump, const flat_iterator& a) noexcept { return flat_iterator(a.ptr_ + jump, a.stride_); }
+        inline friend flat_iterator operator-(const flat_iterator& a, size_type jump) noexcept { return flat_iterator(a.ptr_ - jump, a.stride_); }
+        inline difference_type operator-(const flat_iterator& other) const noexcept { return distance(other); }
+
+        
+        flat_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
+        flat_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        
+        inline friend bool operator< (const flat_iterator& a, const flat_iterator& b) { return a.ptr_ < b.ptr; }
+        inline friend bool operator<=(const flat_iterator& a, const flat_iterator& b) { return a.ptr_ <= b.ptr; }
+        inline friend bool operator> (const flat_iterator& a, const flat_iterator& b) { return a.ptr_ > b.ptr; }
+        inline friend bool operator>=(const flat_iterator& a, const flat_iterator& b) { return a.ptr_ >= b.ptr; }
+
+    private:
+        pointer ptr_;
+    };
+    
+    struct const_flat_iterator {
+        using iterator_category = std::contiguous_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = const NumberLike*;
+        using reference         = const NumberLike&;
+
+        const_flat_iterator(NumberLike* const pointer) : ptr_(pointer) 
+        {}
+
+        inline reference operator*() const noexcept { return *ptr_; }
+        inline pointer operator->() const noexcept { return ptr_; }
+
+        const_flat_iterator& operator++() noexcept {
+            ++ptr_;
+            return *this; 
+        }  
+
+        const_flat_iterator operator++(int) noexcept {
+            const_flat_iterator result = *this; 
+            ++(*this); 
+            return result; 
+        }
+        
+        inline difference_type distance(const const_flat_iterator& other) const noexcept { return ptr_ - other.ptr_; }
+
+        inline friend bool operator==(const const_flat_iterator a, const const_flat_iterator b) noexcept { return a.ptr_ == b.ptr_; }
+        inline friend bool operator!=(const const_flat_iterator a, const const_flat_iterator b) noexcept { return a.ptr_ != b.ptr_; }
+        inline friend const_flat_iterator operator+(const const_flat_iterator& a, size_type jump) noexcept { return const_flat_iterator(a.ptr_ + jump, a.stride_); }
+        inline friend const_flat_iterator operator+(size_type jump, const const_flat_iterator& a) noexcept { return const_flat_iterator(a.ptr_ + jump, a.stride_); }
+        inline friend const_flat_iterator operator-(const const_flat_iterator& a, size_type jump) noexcept { return const_flat_iterator(a.ptr_ - jump, a.stride_); }
+        inline difference_type operator-(const const_flat_iterator& other) const noexcept { return distance(other); }
+
+        
+        const_flat_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
+        const_flat_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        
+        inline friend bool operator< (const const_flat_iterator& a, const const_flat_iterator& b) noexcept { return a.ptr_ < b.ptr; }
+        inline friend bool operator<=(const const_flat_iterator& a, const const_flat_iterator& b) noexcept { return a.ptr_ <= b.ptr; }
+        inline friend bool operator> (const const_flat_iterator& a, const const_flat_iterator& b) noexcept { return a.ptr_ > b.ptr; }
+        inline friend bool operator>=(const const_flat_iterator& a, const const_flat_iterator& b) noexcept { return a.ptr_ >= b.ptr; }
+
+    private:
+        pointer ptr_;
+    };
+    
+    struct flat_stride_iterator {
         
     };
-    
-    struct const_iterator {
+
+    struct const_flat_stride_iterator {
+
+    };
+
+    struct flat_column_iterator {
+        
+    };
+
+    struct flat_const_column_iterator {
 
     };
     
-    struct col_iterator {
+    struct stride_column_iterator {
+        
+    };
+
+    struct stride_const_column_iterator {
 
     };
 
-    struct const_cols_iterator {
+    struct diagonal_iterator {
 
     };
 
-    struct diag_iterator {
+    struct const_diagonal_iterator {
 
     };
 
-    struct const_diag_iterator {
-
-    };
-
-    struct jump_iterator {
-
-    };
-
-    struct const_jump_iterator {
-
-    };
 
 private:
     static constexpr size_type size_ = _rows * _cols;
