@@ -198,15 +198,10 @@ public:
         inline friend bool operator> (const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ > b.ptr; }
         inline friend bool operator>=(const const_row_iterator& a, const const_row_iterator& b) noexcept { return a.ptr_ >= b.ptr; }
 
-    private:
+        private:
         pointer ptr_;
     };
     
-    struct strided_iterator {
-
-
-    };
-
     struct column_iterator {
         
     };
@@ -215,29 +210,100 @@ public:
 
     };
     
-    struct stride_column_iterator {
+    struct strided_iterator {
+        using iterator_category = std::random_access_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = NumberLike*;
+        using reference         = NumberLike&;
+
+        stride_row_iterator(NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) 
+        {}
+
+        inline reference operator*() const noexcept { return *ptr_; }
+        inline pointer operator->() const noexcept { return ptr_; }
+
+        stride_row_iterator& operator++() noexcept {
+            ptr_ += stride_;
+            return *this; 
+        }  
+
+        stride_row_iterator operator++(int) noexcept {
+            stride_row_iterator result = *this; 
+            ++(*this);
+            return result; 
+        }
+
+        inline difference_type distance(const stride_row_iterator& other) const noexcept { return ptr_ - other.ptr_; }
+
+        inline friend bool operator==(const stride_row_iterator a, const stride_row_iterator b) noexcept { return a.ptr_ == b.ptr_; }
+        inline friend bool operator!=(const stride_row_iterator a, const stride_row_iterator b) noexcept { return a.ptr_ != b.ptr_; }
+        inline friend stride_row_iterator operator+(const stride_row_iterator& a, size_type jump) noexcept { return stride_row_iterator(a.ptr_ + (jump * a.stride_), a.stride_); }
+        inline friend stride_row_iterator operator+(size_type jump, const stride_row_iterator& a) noexcept { return stride_row_iterator(a.ptr_ + (jump * a.stride_), a.stride_); }
+        inline friend stride_row_iterator operator-(const stride_row_iterator& a, size_type jump) noexcept { return stride_row_iterator(a.ptr_ - (jump * a.stride_), a.stride_); }
+        inline difference_type operator-(const stride_row_iterator& other) const noexcept { return distance(other); }
+
         
+        stride_row_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
+        stride_row_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        
+        inline friend bool operator< (const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ < b.ptr; }
+        inline friend bool operator<=(const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ <= b.ptr; }
+        inline friend bool operator> (const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ > b.ptr; }
+        inline friend bool operator>=(const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ >= b.ptr; }
+
+    private:
+        pointer ptr_;
+        size_type stride_;
     };
 
     struct const_strided_iterator {
+        using iterator_category = std::random_access_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = const NumberLike*;
+        using reference         = const NumberLike&;
 
-    };
+        const_stride_row_iterator(const NumberLike* const pointer, size_type stride) : ptr_(pointer), stride_(stride) 
+        {}
 
-    struct diagonal_iterator {
+        inline reference operator*() const noexcept { return *ptr_; }
+        inline pointer operator->() const noexcept { return ptr_; }
 
-    };
+        const_stride_row_iterator& operator++() noexcept {
+            ptr_ += stride_;
+            return *this; 
+        }  
 
-    struct const_diagonal_iterator {
+        const_stride_row_iterator operator++(int) noexcept {
+            const_stride_row_iterator result = *this; 
+            ++(*this);
+            return result; 
+        }
 
-    };
+        inline difference_type distance(const const_stride_row_iterator& other) const noexcept { return ptr_ - other.ptr_; }
 
-    struct column_iterator {
+        inline friend bool operator==(const const_stride_row_iterator a, const const_stride_row_iterator b) noexcept { return a.ptr_ == b.ptr_; }
+        inline friend bool operator!=(const const_stride_row_iterator a, const const_stride_row_iterator b) noexcept { return a.ptr_ != b.ptr_; }
+        inline friend const_stride_row_iterator operator+(const const_stride_row_iterator& a, size_type jump) noexcept { return const_stride_row_iterator(a.ptr_ + (jump * a.stride_), a.stride_); }
+        inline friend const_stride_row_iterator operator+(size_type jump, const const_stride_row_iterator& a) noexcept { return const_stride_row_iterator(a.ptr_ + (jump * a.stride_), a.stride_); }
+        inline friend const_stride_row_iterator operator-(const const_stride_row_iterator& a, size_type jump) noexcept { return const_stride_row_iterator(a.ptr_ - (jump * a.stride_), a.stride_); }
+        inline difference_type operator-(const const_stride_row_iterator& other) const noexcept { return distance(other); }
+
         
+        const_stride_row_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
+        stride_row_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
+        
+        inline friend bool operator< (const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ < b.ptr; }
+        inline friend bool operator<=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ <= b.ptr; }
+        inline friend bool operator> (const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ > b.ptr; }
+        inline friend bool operator>=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ >= b.ptr; }
+
+    private:
+        pointer ptr_;
+        size_type stride_;
     };
 
-    struct const_column_iterator {
-
-    };
 
 private:
     static constexpr size_type size_ = _rows * _cols;
