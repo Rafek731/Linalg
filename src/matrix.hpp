@@ -108,7 +108,7 @@ public:
     [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
 
     /// @section iterators
-    /// @subsection row_iterators
+    /// @subsection row_iterator
 
     struct row_iterator {
         using iterator_category = std::contiguous_iterator_tag;
@@ -202,6 +202,8 @@ public:
         pointer ptr_;
     };
     
+    /// @subsection column_iterator
+
     struct column_iterator {
         
     };
@@ -209,7 +211,9 @@ public:
     struct const_column_iterator {
 
     };
-    
+
+    /// @subsection strided_iterator
+
     struct strided_iterator {
         using iterator_category = std::random_access_iterator_tag;
         using difference_type   = std::ptrdiff_t;
@@ -247,10 +251,10 @@ public:
         stride_row_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
         stride_row_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
         
-        inline friend bool operator< (const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ < b.ptr; }
-        inline friend bool operator<=(const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ <= b.ptr; }
-        inline friend bool operator> (const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ > b.ptr; }
-        inline friend bool operator>=(const stride_row_iterator& a, const stride_row_iterator& b) { return a.ptr_ >= b.ptr; }
+        inline friend bool operator< (const stride_row_iterator& a, const stride_row_iterator& b) noexcept { return a.ptr_ <  b.ptr_; }
+        inline friend bool operator<=(const stride_row_iterator& a, const stride_row_iterator& b) noexcept { return a.ptr_ <= b.ptr_; }
+        inline friend bool operator> (const stride_row_iterator& a, const stride_row_iterator& b) noexcept { return a.ptr_ >  b.ptr_; }
+        inline friend bool operator>=(const stride_row_iterator& a, const stride_row_iterator& b) noexcept { return a.ptr_ >= b.ptr_; }
 
     private:
         pointer ptr_;
@@ -294,10 +298,10 @@ public:
         const_stride_row_iterator& operator+=(size_type jump) noexcept { ptr_ += jump; return *this; }
         stride_row_iterator& operator-=(size_type jump) noexcept { ptr_ -= jump; return *this; }
         
-        inline friend bool operator< (const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ < b.ptr; }
-        inline friend bool operator<=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ <= b.ptr; }
-        inline friend bool operator> (const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ > b.ptr; }
-        inline friend bool operator>=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) { return a.ptr_ >= b.ptr; }
+        inline friend bool operator< (const const_stride_row_iterator& a, const const_stride_row_iterator& b) noexcept { return a.ptr_ <  b.ptr_; }
+        inline friend bool operator<=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) noexcept { return a.ptr_ <= b.ptr_; }
+        inline friend bool operator> (const const_stride_row_iterator& a, const const_stride_row_iterator& b) noexcept { return a.ptr_ >  b.ptr_; }
+        inline friend bool operator>=(const const_stride_row_iterator& a, const const_stride_row_iterator& b) noexcept { return a.ptr_ >= b.ptr_; }
 
     private:
         pointer ptr_;
