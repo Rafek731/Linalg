@@ -18,12 +18,12 @@ class Matrix {
     static_assert(_rows > 0 && _cols > 0, "Matrix dimensions (_rows and _cols) must be greater than 0.");
 public:
 
-    Matrix();
-    explicit Matrix(NumberLike init_value);
+    Matrix() = default;
+    explicit Matrix(NumberLike init_value) : Matrix() { data_.fill(init_value); };
 
     [[nodiscard]] static constexpr size_type rows() noexcept { return _rows; }
     [[nodiscard]] static constexpr size_type cols() noexcept { return _cols; }
-    [[nodiscard]] [[nodiscard]] static constexpr size_type size() noexcept { return size_; }
+    [[nodiscard]] static constexpr size_type size() noexcept { return size_; }
 
     /// arithmetic operators
     [[nodiscard]] Matrix  add (const NumberLike scalar)       const noexcept;
@@ -62,25 +62,49 @@ public:
     [[nodiscard]] Matrix  operator/ (const NumberLike scalar)     const noexcept;
     Matrix& operator/=(const NumberLike scalar)     noexcept;
 
-    Matrix<_rows, _cols, bool> negate() const noexcept;
-    Matrix<_rows, _cols, bool> operator!() const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> negate() const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator!() const noexcept;
 
-    Matrix<_rows, _cols, bool> equal (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> not_equal(const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> smaller (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> smaller_equal (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> greater (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> greater_equal (const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> equal(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> equal(const NumberLike scalar) const noexcept;
 
-    Matrix<_rows, _cols, bool> operator==(const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> operator!=(const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> operator< (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> operator<=(const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> operator> (const Matrix& other) const noexcept;
-    Matrix<_rows, _cols, bool> operator>=(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> not_equal(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> not_equal(const NumberLike scalar) const noexcept;
 
-    NumberLike& operator[](size_type row, size_type col) noexcept;
-    NumberLike operator[](size_type row, size_type col) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller_equal(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller_equal(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater_equal(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater_equal(const NumberLike scalar) const noexcept;
+    
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator==(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator==(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator!=(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator!=(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator< (const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator< (const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator<=(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator<=(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator> (const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator> (const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const Matrix& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const NumberLike scalar) const noexcept;
+
+    [[nodiscard]] NumberLike& operator[](size_type row, size_type col) noexcept;
+    [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
+
 private:
     static constexpr size_type size_ = _rows * _cols;
     std::array<NumberLike, size_> data_;
@@ -89,17 +113,6 @@ private:
     template <size_type _r, size_type _c, Number _N>
     friend class Matrix;
 };
-
-// --- Constructors ---
-
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>::Matrix() : data_{}
-{}
-
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>::Matrix(NumberLike init_value) : data_{} {
-    data_.fill(init_value);
-}
 
 // --- Addition ---
 
@@ -357,7 +370,7 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::negate() const noex
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    std::negate<>())
+                    std::negate<>());
     return result;
 }
 
@@ -372,8 +385,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::equal(const Matrix&
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::equal_to<>())
+                    std::equal_to<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::equal(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val == scalar; });
     return result;
 }
 
@@ -383,8 +408,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::not_equal(const Mat
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::not_equal_to<>())
+                    std::not_equal_to<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::not_equal(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val != scalar; });
     return result;
 }
 
@@ -394,8 +431,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller(const Matri
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::less<>())
+                    std::less<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val < scalar; });
     return result;
 }
 
@@ -405,8 +454,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller_equal(const
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::less_equal<>())
+                    std::less_equal<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller_equal(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val <= scalar; });
     return result;
 }
 
@@ -416,8 +477,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater(const Matri
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::greater<>())
+                    std::greater<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val > scalar; });
     return result;
 }
 
@@ -427,8 +500,20 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater_equal(const
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
+                    other.data_.begin(),
                     result.data_.begin(),
-                    std::greater_equal<>())
+                    std::greater_equal<>());
+    return result;
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater_equal(const NumberLike scalar) const noexcept {
+    Matrix<_rows, _cols, bool> result;
+    std::transform (std::execution::unseq,
+                    data_.begin(),
+                    data_.end(),
+                    result.data_.begin(),
+                    [scalar](const NumberLike val) { return val >= scalar; });
     return result;
 }
 
@@ -438,8 +523,18 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const Ma
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const NumberLike scalar) const noexcept {
+    return equal(other);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
 Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator!=(const Matrix& other) const noexcept {
     return not_equal(other);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator!=(const NumberLike scalar) const noexcept {
+    return not_equal(scalar);
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
@@ -448,8 +543,18 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<(const Mat
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<(const NumberLike scalar) const noexcept {
+    return smaller(scalar);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
 Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<=(const Matrix& other) const noexcept {
     return smaller_equal(other);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<=(const NumberLike scalar) const noexcept {
+    return smaller_equal(scalar);
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
@@ -458,8 +563,28 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>(const Mat
 }
 
 template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>(const NumberLike scalar) const noexcept {
+    return greater(scalar);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
 Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>=(const Matrix& other) const noexcept {
     return greater_equal(other);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>=(const NumberLike scalar) const noexcept {
+    return greater_equal(scalar);
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+NumberLike Matrix<_rows, _cols, NumberLike>::operator[](size_type row, size_type col) const noexcept {
+    return data_[row * _cols + col];
+}
+
+template<size_type _rows, size_type _cols, Number NumberLike>
+NumberLike& Matrix<_rows, _cols, NumberLike>::operator[](size_type row, size_type col) noexcept {
+    return data_[row * _cols + col];
 }
 
 } // namespace linalg
