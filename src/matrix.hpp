@@ -9,127 +9,125 @@
 #include "linalg.hpp"
 
 namespace linalg {
-using size_type = std::size_t;
-
 static constexpr size_type dynamic = static_cast<size_type>(-1); 
 
-template <size_type _rows, size_type _cols, Number NumberLike = double>
+template <size_type _rows, size_type _cols, NumberLike Number = double>
 class Matrix {
     static_assert(_rows > 0 && _cols > 0, "Matrix dimensions (_rows and _cols) must be greater than 0.");
 public:
 
     Matrix() = default;
-    explicit Matrix(NumberLike init_value) : Matrix() { data_.fill(init_value); };
+    explicit Matrix(Number init_value) : Matrix() { data_.fill(init_value); };
 
     [[nodiscard]] static constexpr size_type rows() noexcept { return _rows; }
     [[nodiscard]] static constexpr size_type cols() noexcept { return _cols; }
     [[nodiscard]] static constexpr size_type size() noexcept { return size_; }
 
     /// arithmetic operators
-    [[nodiscard]] Matrix add (const NumberLike scalar)       const noexcept;
+    [[nodiscard]] Matrix add (const Number scalar)       const noexcept;
     [[nodiscard]] Matrix add (const Matrix& other)           const noexcept;
-    [[nodiscard]] Matrix operator+ (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix operator+ (const Number scalar) const noexcept;
     [[nodiscard]] Matrix operator+ (const Matrix& other)     const noexcept;
     
-    Matrix& add_inplace(const NumberLike scalar) noexcept;
+    Matrix& add_inplace(const Number scalar) noexcept;
     Matrix& add_inplace(const Matrix& other)     noexcept;
-    Matrix& operator+= (const NumberLike scalar) noexcept;
+    Matrix& operator+= (const Number scalar) noexcept;
     Matrix& operator+= (const Matrix& other)     noexcept;
 
-    [[nodiscard]] Matrix subtract (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix subtract (const Number scalar) const noexcept;
     [[nodiscard]] Matrix subtract (const Matrix& other)     const noexcept;
-    [[nodiscard]] Matrix operator-(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix operator-(const Number scalar) const noexcept;
     [[nodiscard]] Matrix operator-(const Matrix& other)     const noexcept;
     
-    Matrix& subtract_inplace(const NumberLike scalar) noexcept;
+    Matrix& subtract_inplace(const Number scalar) noexcept;
     Matrix& subtract_inplace(const Matrix& other)     noexcept;
-    Matrix& operator-=(const NumberLike scalar)       noexcept;
+    Matrix& operator-=(const Number scalar)       noexcept;
     Matrix& operator-=(const Matrix& other)           noexcept;
 
-    [[nodiscard]] Matrix  mul (const NumberLike scalar)  const noexcept;
-    Matrix& mul_inplace(const NumberLike scalar) noexcept;
+    [[nodiscard]] Matrix  mul (const Number scalar)  const noexcept;
+    Matrix& mul_inplace(const Number scalar) noexcept;
     
     template<size_type _other_cols>
-    [[nodiscard]] Matrix<_rows, _other_cols, NumberLike> mul(const Matrix<_cols, _other_cols, NumberLike>& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _other_cols, Number> mul(const Matrix<_cols, _other_cols, Number>& other) const noexcept;
     template<size_type _other_cols>
-    [[nodiscard]] Matrix<_rows, _other_cols, NumberLike> operator*(const Matrix<_cols, _other_cols, NumberLike>& other) const noexcept;
+    [[nodiscard]] Matrix<_rows, _other_cols, Number> operator*(const Matrix<_cols, _other_cols, Number>& other) const noexcept;
     
-    [[nodiscard]] Matrix  operator* (const NumberLike scalar) const noexcept;
-    Matrix& operator*=(const NumberLike scalar) noexcept;
+    [[nodiscard]] Matrix  operator* (const Number scalar) const noexcept;
+    Matrix& operator*=(const Number scalar) noexcept;
 
-    [[nodiscard]] Matrix  divide (const NumberLike scalar)        const noexcept;
-    Matrix& divide_inplace(const NumberLike scalar) noexcept;
-    [[nodiscard]] Matrix  operator/ (const NumberLike scalar)     const noexcept;
-    Matrix& operator/=(const NumberLike scalar)     noexcept;
+    [[nodiscard]] Matrix  divide (const Number scalar)        const noexcept;
+    Matrix& divide_inplace(const Number scalar) noexcept;
+    [[nodiscard]] Matrix  operator/ (const Number scalar)     const noexcept;
+    Matrix& operator/=(const Number scalar)     noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> negate() const noexcept;
     [[nodiscard]] Matrix<_rows, _cols, bool> operator!() const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> equal(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> equal(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> equal(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> not_equal(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> not_equal(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> not_equal(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> smaller(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> smaller(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> smaller_equal(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> smaller_equal(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> smaller_equal(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> greater(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> greater(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> greater_equal(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> greater_equal(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> greater_equal(const Number scalar) const noexcept;
     
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator==(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator==(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator==(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator!=(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator!=(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator!=(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator< (const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator< (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator< (const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator<=(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator<=(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator<=(const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator> (const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator> (const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator> (const Number scalar) const noexcept;
 
     [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const Matrix& other) const noexcept;
-    [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix<_rows, _cols, bool> operator>=(const Number scalar) const noexcept;
 
-    [[nodiscard]] NumberLike& operator[](size_type row, size_type col) noexcept;
-    [[nodiscard]] NumberLike  operator[](size_type row, size_type col) const noexcept;
+    [[nodiscard]] Number& operator[](size_type row, size_type col) noexcept;
+    [[nodiscard]] Number  operator[](size_type row, size_type col) const noexcept;
 
 private:
     static constexpr size_type size_ = _rows * _cols;
-    std::array<NumberLike, size_> data_;
+    std::array<Number, size_> data_;
 
     // Allows operators to access data_ across different sizes/types
-    template <size_type _r, size_type _c, Number _N>
+    template <size_type _r, size_type _c, NumberLike _N>
     friend class Matrix;
 };
 
 // --- Addition ---
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::add(const NumberLike scalar) const noexcept {
-    Matrix<_rows, _cols, NumberLike> result;
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::add(const Number scalar) const noexcept {
+    Matrix<_rows, _cols, Number> result;
     
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(), 
                    result.data_.begin(),
-                   [scalar](const NumberLike val){ return val + scalar; });
+                   [scalar](const Number val){ return val + scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::add(const Matrix& other) const noexcept {
-    Matrix<_rows, _cols, NumberLike> result;
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::add(const Matrix& other) const noexcept {
+    Matrix<_rows, _cols, Number> result;
 
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(),
@@ -140,28 +138,28 @@ Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::add(const Mat
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator+(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator+(const Number scalar) const noexcept {
     return add(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator+(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator+(const Matrix& other) const noexcept {
     return add(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::add_inplace(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::add_inplace(const Number scalar) noexcept {
     std::transform(std::execution::unseq,
                    data_.begin(), data_.end(),
                    data_.begin(),
-                   [scalar](const NumberLike val){ return val + scalar; });
+                   [scalar](const Number val){ return val + scalar; });
     
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::add_inplace(const Matrix& other) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::add_inplace(const Matrix& other) noexcept {
     std::transform(std::execution::unseq,
                    data_.begin(), data_.end(),
                    other.data_.begin(),
@@ -171,33 +169,33 @@ Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::add_inplace(
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator+=(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator+=(const Number scalar) noexcept {
     return add_inplace(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator+=(const Matrix& other) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator+=(const Matrix& other) noexcept {
     return add_inplace(other);
 }
 
 // --- Subtraction ---
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::subtract(const NumberLike scalar) const noexcept {
-    Matrix<_rows, _cols, NumberLike> result;
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::subtract(const Number scalar) const noexcept {
+    Matrix<_rows, _cols, Number> result;
     
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(), 
                    result.data_.begin(),
-                   [scalar](const NumberLike val){ return val - scalar; });
+                   [scalar](const Number val){ return val - scalar; });
     
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::subtract(const Matrix& other) const noexcept {
-    Matrix<_rows, _cols, NumberLike> result;
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::subtract(const Matrix& other) const noexcept {
+    Matrix<_rows, _cols, Number> result;
 
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(),
@@ -208,28 +206,28 @@ Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::subtract(cons
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator-(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator-(const Number scalar) const noexcept {
     return subtract(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator-(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator-(const Matrix& other) const noexcept {
     return subtract(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::subtract_inplace(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::subtract_inplace(const Number scalar) noexcept {
     std::transform(std::execution::unseq,
                    data_.begin(), data_.end(),
                    data_.begin(),
-                   [scalar](const NumberLike val){ return val - scalar; });
+                   [scalar](const Number val){ return val - scalar; });
     
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::subtract_inplace(const Matrix& other) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::subtract_inplace(const Matrix& other) noexcept {
     std::transform(std::execution::unseq,
                    data_.begin(), data_.end(),
                    other.data_.begin(),
@@ -238,47 +236,47 @@ Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::subtract_inp
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator-=(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator-=(const Number scalar) noexcept {
     return subtract_inplace(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator-=(const Matrix& other) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator-=(const Matrix& other) noexcept {
     return subtract_inplace(other);
 }
 
 // --- Multiplication ---
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::mul(const NumberLike scalar) const noexcept {
-    Matrix<_rows, _cols, NumberLike> result;
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::mul(const Number scalar) const noexcept {
+    Matrix<_rows, _cols, Number> result;
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(), 
                    result.data_.begin(), 
-                   [scalar](const NumberLike val){ return val * scalar; });
+                   [scalar](const Number val){ return val * scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::mul_inplace(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::mul_inplace(const Number scalar) noexcept {
     std::transform(std::execution::unseq, 
                    data_.begin(), data_.end(),
                    data_.begin(),
-                   [scalar](const NumberLike val){ return val * scalar; });
+                   [scalar](const Number val){ return val * scalar; });
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
+template<size_type _rows, size_type _cols, NumberLike Number>
 template<size_type _other_cols>
-Matrix<_rows, _other_cols, NumberLike> Matrix<_rows, _cols, NumberLike>::mul(const Matrix<_cols, _other_cols, NumberLike>& other) const noexcept {
-    Matrix<_rows, _other_cols, NumberLike> result(0);
+Matrix<_rows, _other_cols, Number> Matrix<_rows, _cols, Number>::mul(const Matrix<_cols, _other_cols, Number>& other) const noexcept {
+    Matrix<_rows, _other_cols, Number> result(0);
     // worth noticing that when compiling with -O2 or -O3 flags modern compilers will cache loop invariant results automatically
     for (size_type i = 0; i < _rows; ++i) {
         size_type i_mul_other_cols = i * _other_cols; // cache loop invariant result
 
         for (size_type k = 0; k < _cols; ++k) {
-            NumberLike a_ik = data_[i * _cols + k]; // cache the current result
+            Number a_ik = data_[i * _cols + k]; // cache the current result
             size_type k_mul_other_cols = k * _other_cols; // cache loop invariant result
 
             for (size_type j = 0; j < _other_cols; ++j) {
@@ -290,39 +288,39 @@ Matrix<_rows, _other_cols, NumberLike> Matrix<_rows, _cols, NumberLike>::mul(con
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
+template<size_type _rows, size_type _cols, NumberLike Number>
 template<size_type _other_cols>
-Matrix<_rows, _other_cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator*(const Matrix<_cols, _other_cols, NumberLike>& other) const noexcept {
+Matrix<_rows, _other_cols, Number> Matrix<_rows, _cols, Number>::operator*(const Matrix<_cols, _other_cols, Number>& other) const noexcept {
     return mul(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator*(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator*(const Number scalar) const noexcept {
     return mul(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator*=(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator*=(const Number scalar) noexcept {
     return mul_inplace(scalar);
 }
 
 // --- Division ---
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::divide(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::divide(const Number scalar) const noexcept {
     
-    NumberLike reciprocal = 0; 
-    if constexpr (!std::numeric_limits<NumberLike>::is_iec559) 
+    Number reciprocal = 0; 
+    if constexpr (!std::numeric_limits<Number>::is_iec559) 
         assert(scalar != 0 && "FATAL: Matrix integer division by zero!");
     else 
-        reciprocal = static_cast<NumberLike>(1) / scalar;
+        reciprocal = static_cast<Number>(1) / scalar;
     
-    Matrix<_rows, _cols, NumberLike> result;
+    Matrix<_rows, _cols, Number> result;
     
     std::transform(std::execution::par_unseq, 
                    data_.begin(), data_.end(), result.data_.begin(), 
-                   [scalar, reciprocal](NumberLike val) {
-                        if constexpr (std::numeric_limits<NumberLike>::is_iec559) {
+                   [scalar, reciprocal](Number val) {
+                        if constexpr (std::numeric_limits<Number>::is_iec559) {
                             return val * reciprocal; // In case IEEE754 compliable type
                         } else {
                             return val / scalar;     // Other (integer) types
@@ -331,18 +329,18 @@ Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::divide(const 
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::divide_inplace(const NumberLike scalar) noexcept {
-    NumberLike reciprocal = 0; 
-    if constexpr (!std::numeric_limits<NumberLike>::is_iec559) 
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::divide_inplace(const Number scalar) noexcept {
+    Number reciprocal = 0; 
+    if constexpr (!std::numeric_limits<Number>::is_iec559) 
         assert(scalar != 0 && "FATAL: Matrix integer division by zero!");
     else 
-        reciprocal = static_cast<NumberLike>(1) / scalar;
+        reciprocal = static_cast<Number>(1) / scalar;
 
     std::transform(std::execution::par_unseq, 
                    data_.begin(), data_.end(), data_.begin(), 
-                   [scalar, reciprocal](NumberLike val) {
-                        if constexpr (std::numeric_limits<NumberLike>::is_iec559) {
+                   [scalar, reciprocal](Number val) {
+                        if constexpr (std::numeric_limits<Number>::is_iec559) {
                             return val * reciprocal; // In case IEEE754 compliable type
                         } else {
                             return val / scalar;     // Other (integer) types
@@ -351,20 +349,20 @@ Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::divide_inpla
     return *this;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike> Matrix<_rows, _cols, NumberLike>::operator/(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number> Matrix<_rows, _cols, Number>::operator/(const Number scalar) const noexcept {
     return divide(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, NumberLike>& Matrix<_rows, _cols, NumberLike>::operator/=(const NumberLike scalar) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, Number>& Matrix<_rows, _cols, Number>::operator/=(const Number scalar) noexcept {
     return divide_inplace(scalar);
 }
 
 // --- Logical Operators ---
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::negate() const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::negate() const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -374,13 +372,13 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::negate() const noex
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator!() const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator!() const noexcept {
     return negate();
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::equal(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::equal(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -391,19 +389,19 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::equal(const Matrix&
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::equal(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::equal(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val == scalar; });
+                    [scalar](const Number val) { return val == scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::not_equal(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::not_equal(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -414,19 +412,19 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::not_equal(const Mat
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::not_equal(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::not_equal(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val != scalar; });
+                    [scalar](const Number val) { return val != scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::smaller(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -437,19 +435,19 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller(const Matri
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::smaller(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val < scalar; });
+                    [scalar](const Number val) { return val < scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller_equal(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::smaller_equal(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -460,19 +458,19 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller_equal(const
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::smaller_equal(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::smaller_equal(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val <= scalar; });
+                    [scalar](const Number val) { return val <= scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::greater(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -483,19 +481,19 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater(const Matri
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::greater(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val > scalar; });
+                    [scalar](const Number val) { return val > scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater_equal(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::greater_equal(const Matrix& other) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
@@ -506,84 +504,84 @@ Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater_equal(const
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::greater_equal(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::greater_equal(const Number scalar) const noexcept {
     Matrix<_rows, _cols, bool> result;
     std::transform (std::execution::unseq,
                     data_.begin(),
                     data_.end(),
                     result.data_.begin(),
-                    [scalar](const NumberLike val) { return val >= scalar; });
+                    [scalar](const Number val) { return val >= scalar; });
     return result;
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator==(const Matrix& other) const noexcept {
     return equal(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator==(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator==(const Number scalar) const noexcept {
     return equal(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator!=(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator!=(const Matrix& other) const noexcept {
     return not_equal(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator!=(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator!=(const Number scalar) const noexcept {
     return not_equal(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator<(const Matrix& other) const noexcept {
     return smaller(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator<(const Number scalar) const noexcept {
     return smaller(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<=(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator<=(const Matrix& other) const noexcept {
     return smaller_equal(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator<=(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator<=(const Number scalar) const noexcept {
     return smaller_equal(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator>(const Matrix& other) const noexcept {
     return greater(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator>(const Number scalar) const noexcept {
     return greater(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>=(const Matrix& other) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator>=(const Matrix& other) const noexcept {
     return greater_equal(other);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-Matrix<_rows, _cols, bool> Matrix<_rows, _cols, NumberLike>::operator>=(const NumberLike scalar) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Matrix<_rows, _cols, bool> Matrix<_rows, _cols, Number>::operator>=(const Number scalar) const noexcept {
     return greater_equal(scalar);
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-NumberLike Matrix<_rows, _cols, NumberLike>::operator[](size_type row, size_type col) const noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Number Matrix<_rows, _cols, Number>::operator[](size_type row, size_type col) const noexcept {
     return data_[row * _cols + col];
 }
 
-template<size_type _rows, size_type _cols, Number NumberLike>
-NumberLike& Matrix<_rows, _cols, NumberLike>::operator[](size_type row, size_type col) noexcept {
+template<size_type _rows, size_type _cols, NumberLike Number>
+Number& Matrix<_rows, _cols, Number>::operator[](size_type row, size_type col) noexcept {
     return data_[row * _cols + col];
 }
 
