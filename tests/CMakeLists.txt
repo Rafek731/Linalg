@@ -15,13 +15,13 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(matrix_tests test_matrix.cpp)
+add_executable(test_matrix test_matrix.cpp)
 
-target_include_directories(matrix_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(test_matrix PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link Google Test to your executable
-target_link_libraries(matrix_tests PRIVATE GTest::gtest_main)
+target_link_libraries(test_matrix PRIVATE GTest::gtest_main)
 
 # 3. Enable CTest discovery (Allows you to run tests from IDEs easily)
 include(GoogleTest)
-gtest_discover_tests(matrix_tests)
+gtest_discover_tests(test_matrix)
