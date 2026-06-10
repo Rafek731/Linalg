@@ -33,6 +33,15 @@ class Matrix<linalg::dynamic, linalg::dynamic, Number> {
 
     Matrix  mul_matrix(const Matrix& other) const;
     Matrix& mul_matrix_inplace(const Matrix& other);
+
+    Matrix<linalg::dynamic, linalg::dynamic, bool> negate(const Number scalar);
+    
+    Matrix<linalg::dynamic, linalg::dynamic, bool> equal(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> not_equal(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> greater(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> greater_equal(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> smaller(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> smaller_equal(const Number scalar);
     
     Matrix  operator+ (const Number scalar) const;
     Matrix  operator+ (const Matrix& other) const;
@@ -48,27 +57,37 @@ class Matrix<linalg::dynamic, linalg::dynamic, Number> {
     Matrix  operator* (const Matrix& other) const;
     Matrix& operator*=(const Number scalar);
     Matrix& operator*=(const Matrix& other);
-
+    
     Matrix  operator% (const Matrix& other) const;
     Matrix& operator%=(const Matrix& other);
+    
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator!(const Number scalar);
+    
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator==(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator!=(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator>(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator>=(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator<(const Number scalar);
+    Matrix<linalg::dynamic, linalg::dynamic, bool> operator<=(const Number scalar);
 
     Matrix& operator=(Matrix&& other);
     
     Number  operator[](size_type row, size_type column) const;
     Number& operator[](size_type row, size_type column);
-
+    
     std::span<Number>       get_row(size_type row_idx);
     std::span<const Number> get_row(size_type row_idx) const;
-
+    
     std::vector<Number>     get_col(size_type col_idx) const;
-    std::vecotor<Number*>   get_col(size_type col_idx);
-
+    std::vector<std::reference_wrapper<Number>> get_col(size_type col_idx);
+    
     std::span<Number> flatten() const;
-
+    
     void transpose();
     void reshape(size_type new_rows, size_type new_cols);
-
+    
     Matrix copy() const { return Matrix(*this); };
+    Matrix&& move();
 
 private:
     std::vector<Number> data_;
