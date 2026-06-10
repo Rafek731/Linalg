@@ -124,6 +124,41 @@ public:
     /// @section iterators
     /// @subsection row_iterator
 
+    // ============================================================================
+    // Row Iterators
+    // ============================================================================
+
+    template <std::ptrdiff_t _stride = 1, std::input_iterator_tag _tag = std::forward_iterator_tag>
+    struct base_iterator {
+        using iterator_category = _tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = NumberLike*;
+        using reference         = NumberLike&;
+
+
+    private:
+        pointer ptr_;    
+    };
+
+    template<std::ptrdiff_t _stride = 1, std::input_iterator_tag _tag = std::forward_iterator_tag>
+    struct base_const_iterator {
+        using iterator_category = _tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = NumberLike;
+        using pointer           = NumberLike*;
+        using reference         = NumberLike&;
+    };
+
+    /**
+     * @struct row_iterator
+     * @brief Contiguous iterator for iterating over matrix elements row-by-row.
+     * 
+     * This iterator provides random-access iteration over matrix elements in row-major order.
+     * It maintains a pointer to a matrix element and allows all standard random-access operations.
+     */
+
+
     struct row_iterator {
         using iterator_category = std::contiguous_iterator_tag;
         using difference_type   = std::ptrdiff_t;
