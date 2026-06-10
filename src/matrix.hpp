@@ -31,10 +31,10 @@ public:
 
     /// @section arithmetic_operators
 
-    [[nodiscard]] Matrix add (const NumberLike scalar)       const noexcept;
-    [[nodiscard]] Matrix add (const Matrix& other)           const noexcept;
-    [[nodiscard]] Matrix operator+ (const NumberLike scalar) const noexcept;
-    [[nodiscard]] Matrix operator+ (const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix add (const NumberLike scalar)      const noexcept;
+    [[nodiscard]] Matrix add(const Matrix& other)           const noexcept;
+    [[nodiscard]] Matrix operator+(const NumberLike scalar) const noexcept;
+    [[nodiscard]] Matrix operator+(const Matrix& other)     const noexcept;
     
     Matrix& add_inplace(const NumberLike scalar) noexcept;
     Matrix& add_inplace(const Matrix& other)     noexcept;
@@ -62,9 +62,9 @@ public:
     [[nodiscard]] Matrix  operator* (const NumberLike scalar) const noexcept;
     Matrix& operator*=(const NumberLike scalar) noexcept;
 
-    [[nodiscard]] Matrix  divide (const NumberLike scalar)        const noexcept;
+    [[nodiscard]] Matrix  divide (const NumberLike scalar)    const noexcept;
+    [[nodiscard]] Matrix  operator/ (const NumberLike scalar) const noexcept;
     Matrix& divide_inplace(const NumberLike scalar) noexcept;
-    [[nodiscard]] Matrix  operator/ (const NumberLike scalar)     const noexcept;
     Matrix& operator/=(const NumberLike scalar)     noexcept;
 
     /// @section logical_operators
