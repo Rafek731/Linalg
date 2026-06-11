@@ -103,7 +103,7 @@ private:
 template<NumberLike Number>
 DynamicMatrix<Number> DynamicMatrix<Number>::strassen_multiplication(const DynamicMatrix& A, const DynamicMatrix& B) {
     if(A.rows_ < 2) 
-        return DynamicMatrix(1, 1, A[0, 0], B[0, 0]);
+        return DynamicMatrix(1, 1, A[0, 0] * B[0, 0]);
     
     // strassen_partition
     const size_type A_half_rows = A.rows_ >> 1;
