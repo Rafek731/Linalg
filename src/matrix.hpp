@@ -32,24 +32,24 @@ public:
     /// @section arithmetic_operators
 
     [[nodiscard]] Matrix add (const Number scalar)      const noexcept;
-    [[nodiscard]] Matrix add(const Matrix& other)           const noexcept;
+    [[nodiscard]] Matrix add(const Matrix& other)       const noexcept;
     [[nodiscard]] Matrix operator+(const Number scalar) const noexcept;
-    [[nodiscard]] Matrix operator+(const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix operator+(const Matrix& other) const noexcept;
     
     Matrix& add_inplace(const Number scalar) noexcept;
-    Matrix& add_inplace(const Matrix& other)     noexcept;
+    Matrix& add_inplace(const Matrix& other) noexcept;
     Matrix& operator+= (const Number scalar) noexcept;
-    Matrix& operator+= (const Matrix& other)     noexcept;
+    Matrix& operator+= (const Matrix& other) noexcept;
 
     [[nodiscard]] Matrix subtract (const Number scalar) const noexcept;
-    [[nodiscard]] Matrix subtract (const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix subtract (const Matrix& other) const noexcept;
     [[nodiscard]] Matrix operator-(const Number scalar) const noexcept;
-    [[nodiscard]] Matrix operator-(const Matrix& other)     const noexcept;
+    [[nodiscard]] Matrix operator-(const Matrix& other) const noexcept;
     
     Matrix& subtract_inplace(const Number scalar) noexcept;
-    Matrix& subtract_inplace(const Matrix& other)     noexcept;
+    Matrix& subtract_inplace(const Matrix& other) noexcept;
     Matrix& operator-=(const Number scalar)       noexcept;
-    Matrix& operator-=(const Matrix& other)           noexcept;
+    Matrix& operator-=(const Matrix& other)       noexcept;
 
     [[nodiscard]] Matrix mul_elements(const Number scalar) const noexcept;
     Matrix& mul_elements_inplace(const Number scalar) noexcept;
