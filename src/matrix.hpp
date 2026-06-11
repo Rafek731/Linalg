@@ -6,6 +6,7 @@
 #include <execution> // std::excecution::unseq
 #include <functional> // std::plus, std::minus, std::less, std::less_equal, std::greate, std::greater_equal, std::equal_to, std::not_equal_to
 #include <span>
+#include <thread>
 
 #include "linalg.hpp"
 
